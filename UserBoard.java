@@ -7,6 +7,8 @@ public class UserBoard extends Board{
    private ArrayList<Move> moves; /** List of at the possible different moves */
    private ArrayList<Move> chosenMoves; /**List of already chosen moves */
    private Random rand; /** Random object to create random numbers */
+   private Move nextMove;
+   private boolean shipFound;
      
    /** Passes the filename on to the Board constructor. Initialize the Random object and the ArrayList of all possible
    Moves. 
@@ -32,18 +34,17 @@ public class UserBoard extends Board{
    public String[] makeComputerMove(){
        String[] message = new String[2];
        Move m = pickRandomMove();
-              
-              
+                    
        //makes sure computer doesnt pick the same move twice
        while(chosenMoves.contains(m)){
          m = pickRandomMove();
        }
        chosenMoves.add(m);
-       
-       
+              
        message[0] = m.toString();
        CellStatus s = getLayout().get(m.row()).get(m.col());
-      
+       
+       
       //based on the cell status, updates the apropriate ship and if the ship is sunk, changes all the
       //cells of the ship to sunk status.
       switch(s){
@@ -99,7 +100,6 @@ public class UserBoard extends Board{
                message[1] = "I sunk your cruiser";
             }
             break;
-         
         case DESTROYER:
             if (getFleet().updateFleet(ShipType.ST_DESTROYER)){
                for(int i = 0; i < 10; i++){

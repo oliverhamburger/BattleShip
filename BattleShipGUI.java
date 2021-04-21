@@ -37,8 +37,9 @@ public class BattleShipGUI extends Application{
    private Button computerTurnButton; //computers turn button
    private Button newGame; //new game button
    private Alert alert; //alert for game updates
-   private boolean playerMove;
-   private boolean gameOver;
+   private Text turn; //text for the turn label
+   private boolean playerMove; //boolean determins whos turn it is 
+   private boolean gameOver; //boolean determins if the game is over or not
 
    @Override
    public void start(Stage primaryStage) {
@@ -57,19 +58,23 @@ public class BattleShipGUI extends Application{
       
       //header setup
       header.setAlignment(Pos.CENTER);
-      label.setAlignment(Pos.CENTER);
       Text title = new Text("Battleship");
-      Text compHeader = new Text("          Computer Board");
-      Text userHeader = new Text("User Board              ");
+      Text compHeader = new Text("                            Computer Board");
+      Text userHeader = new Text("                          User Board                           ");
       Font titleFont = Font.font("Verdana", FontWeight.BOLD, 40);
       Font headerFont = Font.font("Verdana", FontWeight.BOLD, 20);
+      Font turnFont = Font.font("Verdana", FontWeight.BOLD, 20);
       title.setFont(titleFont);
+      turn = new Text("Computer Turn");
+      turn.setFont(turnFont);
       compHeader.setFont(headerFont);
       userHeader.setFont(headerFont);
       header.getChildren().add(title);
+      header.getChildren().add(turn);
       label.getChildren().add(userHeader);
       label.getChildren().add(compHeader);
       header.getChildren().add(label);
+      
       
       //setbackground collor
       header.setStyle("-fx-background-color: Aqua;");
@@ -97,6 +102,7 @@ public class BattleShipGUI extends Application{
             initGame();
             drawBoard();
             computerTurnButton.setDisable(false);
+            updateTurnLabel(turn);
          }
        });
        
@@ -110,7 +116,7 @@ public class BattleShipGUI extends Application{
       mainPane.setRight(buttonPane);
       mainPane.setTop(header);
       mainPane.setMargin(userBoard,new Insets(0,10,0,0));
-      
+               
       // complete setup
       Scene scene = new Scene(mainPane);
       primaryStage.setScene(scene);
@@ -187,6 +193,7 @@ public class BattleShipGUI extends Application{
       }
       playerMove = !playerMove;
       computerTurnButton.setDisable(true);
+      updateTurnLabel(turn);
       drawBoard();
    }
  
@@ -238,10 +245,19 @@ public class BattleShipGUI extends Application{
         }
         playerMove = !playerMove; 
         computerTurnButton.setDisable(false); 
+        updateTurnLabel(turn);
         drawBoard();           
      }
-   
-           
+     
+   //function updates the turn label to display whos turn it is
+   public void updateTurnLabel(Text turn){
+      if(playerMove){
+         turn.setText("User turn");
+      }else{
+         turn.setText("Computer turn");
+      }
+   }
+         
    public static void main(String [] args) {
       launch(args);
    }
